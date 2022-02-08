@@ -1,1 +1,1 @@
-{{ json_encode($transactions) }}
+{{ @json_encode($transactions) }}
