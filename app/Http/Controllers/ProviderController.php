@@ -41,7 +41,7 @@ class ProviderController extends Controller
     // Filter by transactiom status
         if ($request->has('statusCode')) { 
             $transactions = array_filter($transactions, function($transaction) use ($request,$providerStatus,$providerSchema){
-                if($transaction[$providerSchema[$transaction['Provider']]['status']] == array_search ($request->query('statusCode'), $providerStatus[$transaction['Provider']])){
+                if($transaction[$providerSchema[$transaction['Provider']]['status']] == array_search (strtolower($request->query('statusCode')), $providerStatus[$transaction['Provider']])){
                     return $transaction;
                 }
             });
@@ -57,7 +57,7 @@ class ProviderController extends Controller
     // Filter by currency
         if ($request->has('currency')) {
             $transactions = array_filter($transactions, function($transaction) use ($request,$providerStatus,$providerSchema){
-                if($transaction[$providerSchema[$transaction['Provider']]['currency']] == $request->query('currency')){
+                if(strtoupper($transaction[$providerSchema[$transaction['Provider']]['currency']]) == strtoupper($request->query('currency'))){
                     return $transaction;
                 }
             });
