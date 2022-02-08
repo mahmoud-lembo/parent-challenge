@@ -1,6 +1,6 @@
 ## Challenge Idea
 
-We have two data providers in json folder we need to read and make some filter operations on them to get the result
+We have two data providers in storage/json/ folder we need to read and make some filter operations on them to get the result
 
 - it list all users which combine transactaions from all the available providerDataProviderX and DataProviderY
 - its able to filter resullt by payment providers for example /api/v1/users?provider=DataProviderX
