@@ -22,9 +22,12 @@ class ProviderController extends Controller
         });
                                     }
     // Filter by amount range
-    if ($request->has(['balanceMin','balanceMax'])) {
-        $transactions = array_filter($transactions, function($transaction) use ($request,$providerStatus,$providerSchema){
-            if($transaction[$providerSchema[$transaction['Provider']]['amount']] >= $request->query('balanceMin') && $transaction[$providerSchema[$transaction['Provider']]['amount']] <= $request->query('balanceMax')){
+    if ($request->has(['balanceMin']) || $request->has(['balanceMax'])) {
+        // Adding Possibility to use one Amount instead of a Range
+        $balanceMin = $request->has('balanceMin') ? $request->query('balanceMin') : PHP_INT_MIN;
+        $balanceMax = $request->has('balanceMax') ? $request->query('balanceMax') : PHP_INT_MAX;
+        $transactions = array_filter($transactions, function($transaction) use ($request,$providerStatus,$providerSchema, $balanceMin, $balanceMax){
+            if($transaction[$providerSchema[$transaction['Provider']]['amount']] >= $balanceMin && $transaction[$providerSchema[$transaction['Provider']]['amount']] <= $balanceMax){
                 return $transaction;
             }
         });
@@ -70,8 +73,8 @@ class ProviderController extends Controller
     // Filter by transactios
         $transactions = $this->filter($request, $transactions, $providerSchema, $providerStatus);
 
-        $view = ($request->has('gui')) ? "home" : "json";
-        return view($view, compact("transactions","providerSchema","providerStatus"));
+        $view = $request->has('gui') ? "home" : "json";
+        return view($view, compact("transactions","providerSchema","providerStatus", "request"));
     }
 }
 

@@ -6,6 +6,7 @@ We have two data providers in storage/json/ folder we need to read and make some
 - its able to filter resullt by payment providers for example /api/v1/users?provider=DataProviderX
 - its able to filter result by three statusCode (authorised, decline, refunded) for example /api/v1/users?statusCode=authorised (it return from all providers that have status code authorised)
 - its able to filer by amount range for example /api/v1/users?balanceMin=10&balanceMax=100
+- its able to filer by amount for example /api/v1/users?balanceMin=10 or /api/v1/users?balanceMax=100
 - its able to filer by currency for example /api/v1/users?currency=USD
 - its able to combine all this filters together
 - the result can be viewed as json from /api/v1/users

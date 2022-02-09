@@ -10,7 +10,7 @@
     <head>
 
     <!--Page Title-->
-    <title>Planet Challenge</title>
+    <title>Parent Challenge</title>
 
     <!-- Main CSS-->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"/>
@@ -20,10 +20,9 @@
 
 <body class="animsition">
 <div class="container">
-<h1>Planet Challenge</h1>
+<h1>Parent Challenge</h1>
 
 <p>A table with third party integration Filter control and Data export</a></p>
-
 <div id="toolbar">
 		<select class="form-control">
 				<option value="">Export Basic</option>
