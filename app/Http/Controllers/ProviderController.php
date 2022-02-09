@@ -11,6 +11,35 @@ class ProviderController extends Controller
 
     }
 
+    public function filter($request, $transactions, $providerSchema, $providerStatus)
+    {
+    // Filter by transaction status
+    if ($request->has('statusCode')) { 
+        $transactions = array_filter($transactions, function($transaction) use ($request,$providerStatus,$providerSchema){
+            if($transaction[$providerSchema[$transaction['Provider']]['status']] == array_search (strtolower($request->query('statusCode')), $providerStatus[$transaction['Provider']])){
+                return $transaction;
+            }
+        });
+                                    }
+    // Filter by amount range
+    if ($request->has(['balanceMin','balanceMax'])) {
+        $transactions = array_filter($transactions, function($transaction) use ($request,$providerStatus,$providerSchema){
+            if($transaction[$providerSchema[$transaction['Provider']]['amount']] >= $request->query('balanceMin') && $transaction[$providerSchema[$transaction['Provider']]['amount']] <= $request->query('balanceMax')){
+                return $transaction;
+            }
+        });
+                                                    }
+    // Filter by currency
+    if ($request->has('currency')) {
+        $transactions = array_filter($transactions, function($transaction) use ($request,$providerStatus,$providerSchema){
+            if(strtoupper($transaction[$providerSchema[$transaction['Provider']]['currency']]) == strtoupper($request->query('currency'))){
+                return $transaction;
+            }
+        });
+                                    }
+    return $transactions;
+    }
+
     public function callback(Request $request)
     {
     // All Transactions Array    
@@ -38,30 +67,9 @@ class ProviderController extends Controller
         $transaction= array_merge($json['transactions'][$i], ["Provider"=>$providerName]);
         array_push($transactions, $transaction);}
                                                     }
-    // Filter by transactiom status
-        if ($request->has('statusCode')) { 
-            $transactions = array_filter($transactions, function($transaction) use ($request,$providerStatus,$providerSchema){
-                if($transaction[$providerSchema[$transaction['Provider']]['status']] == array_search (strtolower($request->query('statusCode')), $providerStatus[$transaction['Provider']])){
-                    return $transaction;
-                }
-            });
-        }
-    // Filter by amount range
-        if ($request->has(['balanceMin','balanceMax'])) {
-            $transactions = array_filter($transactions, function($transaction) use ($request,$providerStatus,$providerSchema){
-                if($transaction[$providerSchema[$transaction['Provider']]['amount']] >= $request->query('balanceMin') && $transaction[$providerSchema[$transaction['Provider']]['amount']] <= $request->query('balanceMax')){
-                    return $transaction;
-                }
-            });
-        }
-    // Filter by currency
-        if ($request->has('currency')) {
-            $transactions = array_filter($transactions, function($transaction) use ($request,$providerStatus,$providerSchema){
-                if(strtoupper($transaction[$providerSchema[$transaction['Provider']]['currency']]) == strtoupper($request->query('currency'))){
-                    return $transaction;
-                }
-            });
-        }
+    // Filter by transactios
+        $transactions = $this->filter($request, $transactions, $providerSchema, $providerStatus);
+
         $view = ($request->has('gui')) ? "home" : "json";
         return view($view, compact("transactions","providerSchema","providerStatus"));
     }
