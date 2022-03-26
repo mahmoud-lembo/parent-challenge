@@ -12,3 +12,5 @@ We have two data providers in storage/json/ folder we need to read and make some
 - the result can be viewed as json from /api/v1/users
 - the result can be viewed using gui from /api/v1/users?gui
 - With Docker (docker-compose.yml) just run ./vendor/bin/sail up
+
+Live URL: https://parent.lembo.tech/
